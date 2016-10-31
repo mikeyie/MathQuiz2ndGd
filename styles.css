@@ -1,0 +1,163 @@
+body {
+    background-color: lightgrey;
+}
+
+.overlay {
+    background-color: rgba(0,0,0,.9);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0px;
+}
+
+.additionbutton {
+    position: relative;
+    background-color: red;
+    font-family:arial;
+    color: white;
+    border: 2px solid white;
+    font-size: 200%;
+    top: 45%;
+    width: 30%;
+    height: 10%;
+    border-radius: 10%;
+}
+.subtractionbutton {
+    position: relative;
+    background-color: blue;
+    font-family:arial;
+    color: white;
+    border: 2px solid white;
+    font-size: 200%;
+    top: 45%;
+    width: 30%;
+    height: 10%;
+    border-radius: 10%;
+}
+
+.pagecontainer {
+    border: 2px solid black;
+    background-color: lightblue;
+}
+
+.titlepadding {
+    background-color: darkblue;
+    height: 2.5%;
+    width: 100%;
+}
+
+.titlecontainer {
+    height: 10%;
+    width: 100%;
+    background-color: darkblue;
+    border-bottom: 7px solid black;
+}
+
+.titletext {
+    display: table-cell;
+    vertical-align: middle;
+    font-size: 16px;
+    font-size: 6.3vh;
+    font-family: sans-serif;
+    font-weight: bold;
+    color: white;
+}
+
+.toptext {
+    margin-top: 3%;
+    font-size: 10vh;
+    font-family: sans-serif;
+    background-color: white;
+    border: 3px solid black;
+    width: 78%;
+    border-radius: 9%;
+    height: 10%;
+}
+
+.stable {
+    margin-top: 2%;
+    width: 100%;
+    height: 60%;
+    border-top: 3px solid grey;
+    border-spacing: 0px;
+}
+.rightbar {
+    width: 37%;
+    padding-left: 3%;
+    padding-right: 3%;
+    font-size: 18vh;
+    font-family: sans-serif;
+    background-color: darkgrey;
+    margin: 0px;
+}
+
+.timer {
+    background-color: #e6e6e6;
+    border: 3px solid grey;
+    width: 100%;
+    text-align: center;
+    padding-top: 0px;
+    border-radius: 9%
+}
+
+.gostop {
+    margin-top: 20%;
+    font-size: 8vh;
+    background-color: darkblue;
+    color: white;
+    padding: 10%;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    border-radius: 18%;
+    border: 3px solid black;
+}
+
+.selecttest {
+    margin-top: 8%;
+    text-align: center;
+    font-size: 3vh;
+    background-color: darkorange;
+    color: white;
+    padding: 10%;
+    padding-top: 9%;
+    padding-bottom: 9%;
+    border-radius: 18%;
+    border: 3px solid black;
+}
+
+.ntable {
+    padding-left: 6%;
+    width: 90%;
+    height: 90%;
+    border-spacing: 1vh;
+    border-collapse: separate;
+}
+
+.n,.g,.b {
+    width: 20%;
+    text-align: center;
+    border-radius: 35%;
+    border: 3px solid black;
+    background-color: #595959;
+    color: white;
+    font-family: sans-serif;
+    font-size: 6vh
+}
+
+.g {
+    background-color: green;
+}
+
+.b {
+    background-color: red;
+}
+
+.resultstext {
+    background-color: white;
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 6vh;
+    padding-top: 2.5%;
+    height: 9%;
+    border:3px solid black;
+}

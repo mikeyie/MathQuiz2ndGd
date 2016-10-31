@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>2nd Grade Math Quiz</title>
+        <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="apple-touch-icon" sizes="57x57" href="mathquiz.png" />
+        <link rel="stylesheet" type="text/css" href="styles.css">
+        <script src="scripts/utilities.js"></script>
+        <script src="scripts/startup.js"></script>
+        <script src="scripts/quiz.js"></script>
+    </head>
+    <body>
+        <center>
+            <div class="pagecontainer" id="pagecontainer">
+                <div class="overlay" id="overlay">
+                    <button onclick="startAddition()" class="additionbutton">Addition</button>
+                    <button onclick="startSubtraction()" class="subtractionbutton">Subtraction</button>
+                </div>
+                <div class="titlepadding"></div>
+                <div id="titlecontainer" class="titlecontainer">
+                    <p id="titletext" class="titletext">2nd Grade Math Quiz</p>
+                </div>
+                <div id="toptext" class="toptext">Test: </div>
+                <table id="stable" class="stable">
+                    <tr>
+                        <td>
+                            <table id="ntable" class="ntable">
+                                <tr>
+                                    <td id="n1" class="n">1</td>
+                                    <td id="n2" class="n">2</td>
+                                    <td id="n3" class="n">3</td>
+                                </tr>
+                                <tr>
+                                    <td id="n4" class="n">4</td>
+                                    <td id="n5" class="n">5</td>
+                                    <td id="n6" class="n">6</td>
+                                </tr>
+                                <tr>
+                                    <td id="n7" class="n">7</td>
+                                    <td id="n8" class="n">8</td>
+                                    <td id="n9" class="n">9</td>
+                                </tr>
+                                <tr>
+                                    <td id="nb" class="b">x</td>
+                                    <td id="n0" class="n">0</td>
+                                    <td id="ng" class="g">></td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td id="rightbar" class="rightbar">
+                            <div id="timer" class="timer">--</div>
+                            <div id="gostop" class="gostop">Start</div>
+                            <div id="selecttest" class="selecttest">Select Test</div>
+                        </td>
+                    </tr>
+                </table>
+                <div id="resultstext" class="resultstext">Enter a Test Number</div>
+            </div>
+        </center>
+    </body>
+</html>
