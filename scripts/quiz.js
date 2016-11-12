@@ -369,7 +369,7 @@ quiz.prototype.createQuestions = function(isDebug){
         this.questions = [];
 
     // *** START OF: Fill them out so that we satisfy that the rule of: 13 of them are "new" ***
-        // For the resst of the quizes we "double" up the questions, and then randomly select the remaining question
+        // For the resst of the quizes we "multiply" the questions, and then add/subtract randomly from the remaining question
         // 3  (4*3=12) - even: 3+0,  0+3,  2+1,  1+2
         //
         // 4  (5*2=10) - odd:  4+0,  0+4,  3+1,  1+3,  2+2
