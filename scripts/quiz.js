@@ -221,32 +221,39 @@ var interval
 quiz.prototype.startTimer = function(){
     interval = setInterval(function(){tick()},1100)
     function tick() {
-        Q.timer--
-        Q.updateImg()
+        Q.timer--;
+        Q.updateImg();
         if (Q.timer === 0) {
-            Q.endTest()
+            Q.endTest();
         }
     }
 }
 
 quiz.prototype.submitAnswer = function(){
-    this.questions[this.currentQuestion][2] = this.enteredNum
-    this.currentQuestion++
+    console.log("this.enteredNum = " + this.enteredNum);
+    this.questions[this.currentQuestion][2] = this.enteredNum;
+    this.currentQuestion++;
+    
+    var length = this.questions.length;
+    var output = "";
+
+    length = this.questions.length;
+    console.log("Number of problems = " + length);
+    for (var index = 0; index < length; index++) {
+        output += this.questions[index] + " | ";
+    }
+    console.log("output = ", output);
     
     if (this.currentQuestion < 30) {
-        this.enteredNum = ""
-        this.updateImg()
+        this.enteredNum = "";
+        this.updateImg();
     }
     else {
-        this.endTest()
+        this.endTest();
     }
 }
 
 quiz.prototype.createAdditionSets = function() {
-    if (this.additionSets) {
-        return;
-    }
-    
     this.additionSets = [];
 
     // 1  (2)  - even: 1+0,  0+1
@@ -341,14 +348,11 @@ quiz.prototype.createAdditionSets = function() {
 }
 
 quiz.prototype.createQuestions = function(isDebug){
-    var newAdditionAlgorithm = true;
-    //newAdditionAlgorithm = false;
-    
-    // Addition Problem Generation
     if (this.arithmetic == "addition") {
         var set;
         var indexA;
         var indexB;
+        var setArray;
 
         this.createAdditionSets();
 
@@ -409,18 +413,19 @@ quiz.prototype.createQuestions = function(isDebug){
             12: {multiplier: 1, action: "+", number: 2},
             11: {multiplier: 1, action: "+", number: 1},
         };
-
         var selection = selections[this.quizNum];
 
         for (indexA = 0; indexA < selection.multiplier; indexA++) {
             for (indexB = 0; indexB < set.length; indexB++){
-                this.questions.push(set[indexB]);
+                setArray = set[indexB];
+                this.questions.push([setArray[0], setArray[1], undefined]);
             }
         }
 
         if (selection.action === "+") {
             for (indexA = 0; indexA < selection.number; indexA++) {
-                this.questions.push(set[randomNum(0, set.length-1)]);
+                setArray = set[randomNum(0, set.length-1)];
+                this.questions.push([setArray[0], setArray[1], undefined]);
             }
         }
         else {
@@ -436,7 +441,8 @@ quiz.prototype.createQuestions = function(isDebug){
         // BUT these are ALREADY in the set from the above logic!!!
         // SHOULD CONFIRM THIS IS REALLY INTENDED?????
         for (indexA = 0; indexA < 4; indexA++) {
-            this.questions.push(set[indexA]);
+            setArray = set[indexA];
+            this.questions.push([setArray[0], setArray[1], undefined]);
         }
 
     // *** The other 13 problems are “review” problems (sums of 9, 8, 7, 6, and 5.)
@@ -484,28 +490,33 @@ quiz.prototype.createQuestions = function(isDebug){
         for (indexA = 1; indexA <= maxSet; indexA++ ) {
             set = this.additionSets[indexA];
             for (indexB = 0; indexB < set.length; indexB++) {
-                allOfTheSets.push(set[indexB]);
+                setArray = set[indexB];
+                allOfTheSets.push([setArray[0], setArray[1], undefined]);
             }
         }
 
+        /////////// HERE!!!
         if (reviewSelection.multiplier > 1) {
             for (indexA = 0; indexA < reviewSelection.multiplier - 1; indexA++) {
-                allOfTheSets = allOfTheSets.concat(allOfTheSets.slice());
+                //allOfTheSets = allOfTheSets.concat(allOfTheSets.slice());
+                length = allOfTheSets.length;
+                for (indexB = 0; indexB < length; indexB++) {
+                    setArray = allOfTheSets[indexB];
+                    allOfTheSets.push([setArray[0], setArray[1], undefined]);
+                }
             }
         }
 
         if (reviewSelection.action === "+") {
             var additionalProblems = [];
             set = allOfTheSets.slice();
-            console.log(set);
             for (indexA = 0; indexA < reviewSelection.number; indexA++) {
                 var indexOfItem = randomNum(0, set.length-1);
-                additionalProblems.push(set[indexOfItem]);
+                additionalProblems.push(set[indexOfItem].slice());
                 // After we add it get rid of it so that it isn't used again
                 set.splice(indexOfItem, 1);
-                console.log(set);
             }
-            
+
             allOfTheSets = allOfTheSets.concat(additionalProblems);
         }
         else {
@@ -577,6 +588,7 @@ quiz.prototype.endTest = function(){
     var correctAnswers = 0
     for(i=0;i<30;i++){
         if (this.arithmetic == "addition") {
+            console.log(Number(this.questions[i][0]) + " + " + Number(this.questions[i][1]) + " = " + Number(this.questions[i][2]));
             if (Number(this.questions[i][0]) + Number(this.questions[i][1]) == Number(this.questions[i][2])) {
                 correctAnswers++
             }
