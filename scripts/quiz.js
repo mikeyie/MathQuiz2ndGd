@@ -567,6 +567,9 @@ quiz.prototype.createQuestions = function(isDebug){
         }
     }
     shuffle(this.questions);
+    shuffle(this.questions);
+    shuffle(this.questions);
+    shuffle(this.questions);
 
     //////////////////////////////////////////////////////////    
     var length = this.questions.length;
