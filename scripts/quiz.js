@@ -230,20 +230,20 @@ quiz.prototype.startTimer = function(){
 }
 
 quiz.prototype.submitAnswer = function(){
-    console.log("this.enteredNum = " + this.enteredNum);
     this.questions[this.currentQuestion][2] = this.enteredNum;
     this.currentQuestion++;
-    
+
+    /* // For debugging only
     var length = this.questions.length;
     var output = "";
-
     length = this.questions.length;
     console.log("Number of problems = " + length);
     for (var index = 0; index < length; index++) {
         output += this.questions[index] + " | ";
     }
     console.log("output = ", output);
-    
+    */
+
     if (this.currentQuestion < 30) {
         this.enteredNum = "";
         this.updateImg();
@@ -571,8 +571,9 @@ quiz.prototype.createQuestions = function(isDebug){
     shuffle(this.questions);
     shuffle(this.questions);
 
-    //////////////////////////////////////////////////////////    
-    var length = this.questions.length;
+    //////////////////////////////////////////////////////////
+    // For debugging only
+    /*var length = this.questions.length;
     var output = "";
 
     length = this.questions.length;
@@ -581,6 +582,7 @@ quiz.prototype.createQuestions = function(isDebug){
         output += this.questions[index] + " | ";
     }
     console.log("output = ", output);
+    */
 }
 
 quiz.prototype.endTest = function(){
@@ -591,7 +593,7 @@ quiz.prototype.endTest = function(){
     var correctAnswers = 0
     for(i=0;i<30;i++){
         if (this.arithmetic == "addition") {
-            console.log(Number(this.questions[i][0]) + " + " + Number(this.questions[i][1]) + " = " + Number(this.questions[i][2]));
+            //console.log(Number(this.questions[i][0]) + " + " + Number(this.questions[i][1]) + " = " + Number(this.questions[i][2]));
             if (Number(this.questions[i][0]) + Number(this.questions[i][1]) == Number(this.questions[i][2])) {
                 correctAnswers++
             }
