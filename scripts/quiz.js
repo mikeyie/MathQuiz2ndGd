@@ -440,9 +440,25 @@ quiz.prototype.createQuestions = function(isDebug){
         // These requirments mean that we'll just pluck the first 4 problems out of the set
         // BUT these are ALREADY in the set from the above logic!!!
         // SHOULD CONFIRM THIS IS REALLY INTENDED?????
-        for (indexA = 0; indexA < 4; indexA++) {
+        /*for (indexA = 0; indexA < 4; indexA++) {
             setArray = set[indexA];
             this.questions.push([setArray[0], setArray[1], undefined]);
+        }*/
+    // *** "No" 0 & 1 Rule, too easy
+    // So now we will randomly choose from the set for 4 more questions
+        // Copy the set into a new array
+        var setCopy = [];
+        for (indexA = 0; indexA < set.length; indexA++) {
+            setArray = set[indexA];
+            setCopy.push([setArray[0], setArray[1], undefined]);
+        }
+
+        // Then randomly choose 4 while removing the one chose so that it doesn't get chose again
+        for (indexA = 0; indexA < 4; indexA++) {
+            var indexOfItem = randomNum(0, setCopy.length-1);
+            setArray = setCopy[indexOfItem];
+            this.questions.push([setArray[0], setArray[1], undefined]);
+            set.splice(indexOfItem, 1);
         }
 
     // *** The other 13 problems are “review” problems (sums of 9, 8, 7, 6, and 5.)
@@ -573,7 +589,8 @@ quiz.prototype.createQuestions = function(isDebug){
 
     //////////////////////////////////////////////////////////
     // For debugging only
-    /*var length = this.questions.length;
+    /*
+    var length = this.questions.length;
     var output = "";
 
     length = this.questions.length;
