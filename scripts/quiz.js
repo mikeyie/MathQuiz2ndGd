@@ -450,84 +450,145 @@ quiz.prototype.createQuestions = function(isDebug){
 
     // *** The other 13 problems are “review” problems (sums of 9, 8, 7, 6, and 5.)
     // *** UPDATE!!!!, instead of 13, it will be 17 because of the removal of the 0 & 1 rule above
-        // 3:  5  (from 1, 2)
-        // 4:  9  (from 1, 2, 3)
-        // 5:  14 (from 1, 2, 3, 4)
-        // 6:  18 (from 2, 3, 4, 5) // DON'T use the 1 set
-        // 7:  22 (from 3, 4, 5, 6) // FROM here done choose anything from the 1 and 2 sets
-        // 8:  30 (from 3, 4, 5, 6, 7)
-        // etc...
-        //
-        // Now we need to get the review problems from the sets below the quizNum
-        // For the quizes of "3" & "4", there aren't enough to select from
-        // - For "3", get all review questions from the sets of "1 & 2", which is 5, triple it = 15, and then randomly add 2 questions
-        // - For "4", get all review questions from the sets of "1 & 2 & 3", which is 9, double it = 18 and then subtract 1 question
-        // - For "5", get all review questions from the sets of "1 & 2 & 3, &4", which is 14, then add 3 questions
-        // - For the reet, get all review questions from the ALL of the sets, then randonly remove until there is ONLY 13 left
-        var reviewSelections = {
-            3:  {multiplier: 3, action: "+", number: 2, minSet: 1},
-            4:  {multiplier: 2, action: "-", number: 1, minSet: 1},
-            5:  {multiplier: 1, action: "+", number: 3, minSet: 1},
-            6:  {multiplier: 1, action: "-", number: 1, minSet: 2},
-            7:  {multiplier: 1, action: "-", number: 0, minSet: 3},
-            8:  {multiplier: 1, action: "-", number: 0, minSet: 3},
-            9:  {multiplier: 1, action: "-", number: 0, minSet: 3},
-            10: {multiplier: 1, action: "-", number: 0, minSet: 3},
-            11: {multiplier: 1, action: "-", number: 0, minSet: 3},
-            12: {multiplier: 1, action: "-", number: 0, minSet: 3},
-            13: {multiplier: 1, action: "-", number: 0, minSet: 3},
-            14: {multiplier: 1, action: "-", number: 0, minSet: 3},
-            15: {multiplier: 1, action: "-", number: 0, minSet: 3},
-            16: {multiplier: 1, action: "-", number: 0, minSet: 3},
-            17: {multiplier: 1, action: "-", number: 0, minSet: 3},
-            18: {multiplier: 1, action: "-", number: 0, minSet: 3},
+    // *** !!!!!ALSO, HERE IS A TWISTER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //  *** For sums of 14 or higher:  It would be terrific if there could be
+    //      two different sets! SEE the COMMENTS in the else block!!!
+        if (this.quizNum < 14) {
+            // 3:  5  (from 1, 2)
+            // 4:  9  (from 1, 2, 3)
+            // 5:  14 (from 1, 2, 3, 4)
+            // 6:  18 (from 2, 3, 4, 5) // DON'T use the 1 set
+            // 7:  22 (from 3, 4, 5, 6) // FROM here done choose anything from the 1 and 2 sets
+            // 8:  30 (from 3, 4, 5, 6, 7)
+            // etc...
+            //
+            // Now we need to get the review problems from the sets below the quizNum
+            // For the quizes of "3" & "4", there aren't enough to select from
+            // - For "3", get all review questions from the sets of "1 & 2", which is 5, triple it = 15, and then randomly add 2 questions
+            // - For "4", get all review questions from the sets of "1 & 2 & 3", which is 9, double it = 18 and then subtract 1 question
+            // - For "5", get all review questions from the sets of "1 & 2 & 3, &4", which is 14, then add 3 questions
+            // - For the reet, get all review questions from the ALL of the sets, then randonly remove until there is ONLY 13 left
+            var reviewSelections = {
+                3:  {multiplier: 3, action: "+", number: 2, minSet: 1},
+                4:  {multiplier: 2, action: "-", number: 1, minSet: 1},
+                5:  {multiplier: 1, action: "+", number: 3, minSet: 1},
+                6:  {multiplier: 1, action: "-", number: 1, minSet: 2},
+                7:  {multiplier: 1, action: "-", number: 0, minSet: 3},
+                8:  {multiplier: 1, action: "-", number: 0, minSet: 3},
+                9:  {multiplier: 1, action: "-", number: 0, minSet: 3},
+                10: {multiplier: 1, action: "-", number: 0, minSet: 3},
+                11: {multiplier: 1, action: "-", number: 0, minSet: 3},
+                12: {multiplier: 1, action: "-", number: 0, minSet: 3},
+                13: {multiplier: 1, action: "-", number: 0, minSet: 3},
+                14: {multiplier: 1, action: "-", number: 0, minSet: 3},
+                15: {multiplier: 1, action: "-", number: 0, minSet: 3},
+                16: {multiplier: 1, action: "-", number: 0, minSet: 3},
+                17: {multiplier: 1, action: "-", number: 0, minSet: 3},
+                18: {multiplier: 1, action: "-", number: 0, minSet: 3}
+            };
+            var reviewSelection = reviewSelections[this.quizNum];
+            var minSet = reviewSelection.minSet;
+            var maxSet = this.quizNum - 1;
 
-        };
-        var reviewSelection = reviewSelections[this.quizNum];
-        var minSet = reviewSelection.minSet;
-        var maxSet = this.quizNum - 1;
-
-        // Concatenate ALL of the sets up to the maxSet
-        var allOfTheSets = [];
-        for (indexA = minSet; indexA <= maxSet; indexA++ ) {
-            set = this.additionSets[indexA];
-            for (indexB = 0; indexB < set.length; indexB++) {
-                setArray = set[indexB];
-                allOfTheSets.push([setArray[0], setArray[1], undefined]);
-            }
-        }
-
-        // Multiply if needed
-        if (reviewSelection.multiplier > 1) {
-            var maxLength = allOfTheSets.length;
-            for (indexA = 0; indexA < reviewSelection.multiplier - 1; indexA++) {
-                for (indexB = 0; indexB < maxLength; indexB++) {
-                    setArray = allOfTheSets[indexB];
+            // Concatenate ALL of the sets up to the maxSet
+            var allOfTheSets = [];
+            for (indexA = minSet; indexA <= maxSet; indexA++ ) {
+                set = this.additionSets[indexA];
+                for (indexB = 0; indexB < set.length; indexB++) {
+                    setArray = set[indexB];
                     allOfTheSets.push([setArray[0], setArray[1], undefined]);
                 }
             }
-        }
 
-        // Add or Subtrackt if needed
-        if (reviewSelection.action === "+") {
-            var additionalProblems = [];
-            set = allOfTheSets.slice();
-            for (indexA = 0; indexA < reviewSelection.number; indexA++) {
-                var indexOfItem = randomNum(0, set.length-1);
-                additionalProblems.push(set[indexOfItem].slice());
-                // After we add it get rid of it so that it isn't used again
-                set.splice(indexOfItem, 1);
+            // Multiply if needed
+            if (reviewSelection.multiplier > 1) {
+                var maxLength = allOfTheSets.length;
+                for (indexA = 0; indexA < reviewSelection.multiplier - 1; indexA++) {
+                    for (indexB = 0; indexB < maxLength; indexB++) {
+                        setArray = allOfTheSets[indexB];
+                        allOfTheSets.push([setArray[0], setArray[1], undefined]);
+                    }
+                }
             }
 
-            allOfTheSets = allOfTheSets.concat(additionalProblems);
+            // Add or Subtrackt if needed
+            if (reviewSelection.action === "+") {
+                var additionalProblems = [];
+                set = allOfTheSets.slice();
+                for (indexA = 0; indexA < reviewSelection.number; indexA++) {
+                    var indexOfItem = randomNum(0, set.length-1);
+                    additionalProblems.push(set[indexOfItem].slice());
+                    // After we add it get rid of it so that it isn't used again
+                    set.splice(indexOfItem, 1);
+                }
+
+                allOfTheSets = allOfTheSets.concat(additionalProblems);
+            }
+            else {
+                for (indexA = (allOfTheSets.length-1); indexA > 16; indexA--) {
+                    allOfTheSets.splice(randomNum(0, allOfTheSets.length-1), 1);
+                }
+            }
+
+            this.questions = this.questions.concat(allOfTheSets);
         }
         else {
-            for (indexA = (allOfTheSets.length-1); indexA > 16; indexA--) {
-                allOfTheSets.splice(randomNum(0, allOfTheSets.length-1), 1);
-            }
-        }
+        //  *** For sums of 14 or higher:  It would be terrific if there could be two different sets of
+        //      review problems so a small fraction (3 out of 13) of smaller sums can be included.
+        //      If so, here’s a breakdown of the 13 review problems
+        //          (With examples for "sums of 15", Quiz #15):
+        //          * 3 review problems would be sums less than 10 and greater than n - 10
+        //              (i.e. for sums of 15, 3 problems would fall in the sums of 5 to 9 range)
+        //          * 10 review problems would be sums of 10 or greater (sums of 10, 11, 12, 13, 14)
+        //              I’m not sure if a “random” program can be programed to stipulate how many for each sum
+        //              since I imagine the program is based on addends, not sums.  But if that’s possible,
+        //              at least one for each of the different sums , [i.e. 3+7=10, 5+6=11, 8+4=12, 6+7=13, 9+5=14, etc.].)
+            // So we need to generate 2 problem sets:
+            //  * First set is the possible question from (quizNum - 10) to 9
+            var minSet = this.quizNum - 10;
+            var maxSet = 9;
 
-        this.questions = this.questions.concat(allOfTheSets);
+            // Concatenate the LOWER set
+            var lowerQuestionSet = [];
+            for (indexA = minSet; indexA <= maxSet; indexA++ ) {
+                set = this.additionSets[indexA];
+                for (indexB = 0; indexB < set.length; indexB++) {
+                    setArray = set[indexB];
+                    lowerQuestionSet.push([setArray[0], setArray[1], undefined]);
+                }
+            }
+
+            // Concatenate the UPPER set
+            minSet = 10;
+            maxSet = this.quizNum - 1;
+            var upperQuestionSet = [];
+            for (indexA = minSet; indexA <= maxSet; indexA++ ) {
+                set = this.additionSets[indexA];
+                for (indexB = 0; indexB < set.length; indexB++) {
+                    setArray = set[indexB];
+                    upperQuestionSet.push([setArray[0], setArray[1], undefined]);
+                }
+            }
+
+            // Now remove from each set until there is ONLY 3 + 2 items in the lowerQuestionSet
+            // and ONLY 10 + 2 items in the upperQuestionSet
+            // BUT!! Becuase we remove the 4 question from the 0 & 1 Rule
+            //  We need to add 2 questions to each problem set
+            for (indexA = (lowerQuestionSet.length-1); indexA >= 5; indexA--) {
+                lowerQuestionSet.splice(randomNum(0, lowerQuestionSet.length-1), 1);
+            }
+            shuffle(lowerQuestionSet);
+            //console.log("lowerQuestionSet = " + lowerQuestionSet);
+
+            for (indexA = (upperQuestionSet.length-1); indexA >= 12; indexA--) {
+                upperQuestionSet.splice(randomNum(0, upperQuestionSet.length-1), 1);
+            }
+            shuffle(upperQuestionSet);
+            //console.log("upperQuestionSet = " + upperQuestionSet);
+
+            this.questions = this.questions.concat(lowerQuestionSet);
+            this.questions = this.questions.concat(upperQuestionSet);
+        }
     }
     // Subtration Problem Generation
     else {
@@ -641,10 +702,8 @@ quiz.prototype.createQuestions = function(isDebug){
                 var temp = this.questions[randomIndex];
                 // Don't use the temp question if it matches the same answer, find one that doesn't!
                 if (indexA < 27) {
-                    console.log("tempQuestionAnswer = " + tempQuestionAnswer + ", q1Result = "+ q1Result);
                     do {
                         var tempQuestionAnswer = (parseInt(temp[0]) + parseInt(temp[1]));
-                        console.log("Yes temp matches with the answers");
                         randomIndex = randomNum(0, 29);
                         temp = this.questions[randomIndex];
                     }
