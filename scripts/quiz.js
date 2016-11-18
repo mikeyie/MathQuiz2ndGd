@@ -725,6 +725,10 @@ quiz.prototype.createQuestions = function(isDebug){
     /*
     console.log("Number of problems = " + length + " (after shuffling)");
     output="";
+    var lessThan10 = 0;
+    var greaterEqTo10 = 0;
+    var quizSum = 0;
+
     for (var index = 0; index < length; index++) {
         var ques = this.questions[index];
         var answer = parseInt(ques[0]) + parseInt(ques[1]);
@@ -734,8 +738,21 @@ quiz.prototype.createQuestions = function(isDebug){
         //output += this.questions[index] + answer + " | ";
     // Only answer
         output += answer + " | ";
+
+        if (answer < 10) {
+            lessThan10++;
+        }
+        else if (answer === this.quizNum) {
+            quizSum++;
+        }
+        else {
+            greaterEqTo10++;
+        }
     }
     console.log("output = ", output);
+    console.log("lessThan10 = " + lessThan10);
+    console.log("greaterEqTo10 = " + greaterEqTo10);
+    console.log("quizSum = " + quizSum);
     */
 }
 
