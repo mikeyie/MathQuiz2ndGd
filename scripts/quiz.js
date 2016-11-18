@@ -446,45 +446,29 @@ quiz.prototype.createQuestions = function(isDebug){
             setArray = set[indexA];
             this.questions.push([setArray[0], setArray[1], undefined]);
         }*/
-    // *** "No" 0 & 1 Rule, too easy
-    // So now we will randomly choose from the set for 2 more questions
-        // Copy the set into a new array
-        var setCopy = [];
-        for (indexA = 0; indexA < set.length; indexA++) {
-            setArray = set[indexA];
-            setCopy.push([setArray[0], setArray[1], undefined]);
-        }
-
-        // Then randomly choose 2 while removing the one chose so that it doesn't get chose again
-        for (indexA = 0; indexA < 2; indexA++) {
-            var indexOfItem = randomNum(0, setCopy.length-1);
-            setArray = setCopy[indexOfItem];
-            this.questions.push([setArray[0], setArray[1], undefined]);
-            set.splice(indexOfItem, 1);
-        }
+    // *** "No" 0 & 1 Rule, too easy!!!!
 
     // *** The other 13 problems are “review” problems (sums of 9, 8, 7, 6, and 5.)
-    // *** UPDATE!!!!, instead of 13, it will be 15 because of the removal of the 0 & 1 rule above
+    // *** UPDATE!!!!, instead of 13, it will be 17 because of the removal of the 0 & 1 rule above
         // 3:  5  (from 1, 2)
         // 4:  9  (from 1, 2, 3)
         // 5:  14 (from 1, 2, 3, 4)
         // 6:  18 (from 2, 3, 4, 5) // DON'T use the 1 set
-        // 7:  18 (from 3, 4, 5, 6) // FROM here done choose anything from the 1 and 2 sets
-        // 8:  26 (from 3, 4, 5, 6, 7)
-        // 9:  35 (from 3, 4, 5, 6, 7, 8)
+        // 7:  22 (from 3, 4, 5, 6) // FROM here done choose anything from the 1 and 2 sets
+        // 8:  30 (from 3, 4, 5, 6, 7)
         // etc...
         //
-        // At this point we have 13 questions + 4 from the 0 & 1 rules for a TOTAL of 17
         // Now we need to get the review problems from the sets below the quizNum
         // For the quizes of "3" & "4", there aren't enough to select from
-        // - For "3", get all review questions from the sets of "1 & 2", which is 5, double it = 10, and then randomly add 3 more
-        // - For "4", get all review questions from the sets of "1 & 2 & 3", which is 9 and then randomly add 4 more
-        // - For the reset, get all review questions from the ALL of the sets, then randonly remove until there is ONLY 13 left
+        // - For "3", get all review questions from the sets of "1 & 2", which is 5, triple it = 15, and then randomly add 2 questions
+        // - For "4", get all review questions from the sets of "1 & 2 & 3", which is 9, double it = 18 and then subtract 1 question
+        // - For "5", get all review questions from the sets of "1 & 2 & 3, &4", which is 14, then add 3 questions
+        // - For the reet, get all review questions from the ALL of the sets, then randonly remove until there is ONLY 13 left
         var reviewSelections = {
-            3:  {multiplier: 3, action: "+", number: 0, minSet: 1},
-            4:  {multiplier: 2, action: "-", number: 3, minSet: 1},
-            5:  {multiplier: 1, action: "+", number: 1, minSet: 1},
-            6:  {multiplier: 1, action: "-", number: 0, minSet: 2},
+            3:  {multiplier: 3, action: "+", number: 2, minSet: 1},
+            4:  {multiplier: 2, action: "-", number: 1, minSet: 1},
+            5:  {multiplier: 1, action: "+", number: 3, minSet: 1},
+            6:  {multiplier: 1, action: "-", number: 1, minSet: 2},
             7:  {multiplier: 1, action: "-", number: 0, minSet: 3},
             8:  {multiplier: 1, action: "-", number: 0, minSet: 3},
             9:  {multiplier: 1, action: "-", number: 0, minSet: 3},
@@ -538,7 +522,7 @@ quiz.prototype.createQuestions = function(isDebug){
             allOfTheSets = allOfTheSets.concat(additionalProblems);
         }
         else {
-            for (indexA = (allOfTheSets.length-1); indexA >= 15; indexA--) {
+            for (indexA = (allOfTheSets.length-1); indexA > 16; indexA--) {
                 allOfTheSets.splice(randomNum(0, allOfTheSets.length-1), 1);
             }
         }
@@ -607,6 +591,7 @@ quiz.prototype.createQuestions = function(isDebug){
         for (indexA = 0; indexA < 29; indexA++) {
             var question1 = this.questions[indexA];
             var question2 = this.questions[indexA+1];
+
             if (question1[0] === question2[0] && question1[1] === question2[1]) {
                 var temp;
                 if (indexA === 28) {
@@ -627,14 +612,72 @@ quiz.prototype.createQuestions = function(isDebug){
         }
     }
 
+    // *** If the same answer to 3 consequtive repeats 3 times then swap one of them out with another problem.
+    // Loop 3 times to look for this anamoly
+    for (indexB = 0; indexB < 2; indexB++) {
+        for (indexA = 0; indexA <= 27; indexA++) {
+            var indexA_p1 = indexA+1;
+            var indexA_p2 = indexA+2;
+            var question1 = this.questions[indexA];
+            var question2 = this.questions[indexA_p1];
+            var question3 = this.questions[indexA_p2];
+            var q1Result = parseInt(question1[0]) + parseInt(question1[1]);
+            var q2Result = parseInt(question2[0]) + parseInt(question2[1]);
+            var q3Result = parseInt(question3[0]) + parseInt(question3[1]);
+            var swapIndex = randomNum(indexA, indexA + 2);
+            var randomIndex;
+            var temp;
+
+            if ((q1Result === q2Result) && (q1Result === q3Result)) {
+                if (indexA === 27) {
+                    randomIndex = randomNum(0, 26);
+                }
+                else {
+                    while ((randomIndex !== indexA_p1) && (randomIndex !== indexA_p2)) {
+                        randomIndex = randomNum(0, 29);
+                    }
+                }
+
+                var temp = this.questions[randomIndex];
+                // Don't use the temp question if it matches the same answer, find one that doesn't!
+                if (indexA < 27) {
+                    console.log("tempQuestionAnswer = " + tempQuestionAnswer + ", q1Result = "+ q1Result);
+                    do {
+                        var tempQuestionAnswer = (parseInt(temp[0]) + parseInt(temp[1]));
+                        console.log("Yes temp matches with the answers");
+                        randomIndex = randomNum(0, 29);
+                        temp = this.questions[randomIndex];
+                    }
+                    while (tempQuestionAnswer === q1Result);
+                }
+                this.questions[randomIndex] = this.questions[swapIndex];
+                this.questions[swapIndex] = temp;
+            }
+        }
+    }
+
     //////////////////////////////////////////////////////////
     // For debugging only
-    /*console.log("Number of problems = " + length + " (after shuffling)");
+    /*
+    var length = this.questions.length;
+    var output = "";
+    */
+
+    /*
+    console.log("Number of problems = " + length + " (after shuffling)");
     output="";
     for (var index = 0; index < length; index++) {
-        output += this.questions[index] + " | ";
+        var ques = this.questions[index];
+        var answer = parseInt(ques[0]) + parseInt(ques[1]);
+    // Without answer
+        //output += this.questions[index] + " | ";
+    // With answer
+        //output += this.questions[index] + answer + " | ";
+    // Only answer
+        output += answer + " | ";
     }
-    console.log("output = ", output);*/
+    console.log("output = ", output);
+    */
 }
 
 quiz.prototype.endTest = function(){
